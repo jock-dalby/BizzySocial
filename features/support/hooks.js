@@ -1,7 +1,7 @@
 // require('babel-register')
 const config = require('../../config')
 const app = require('../../app')
-const server
+var server
 
 module.exports = function () {
 

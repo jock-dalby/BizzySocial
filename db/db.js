@@ -3,61 +3,48 @@ const _ = require('lodash')
 
 module.exports = {
 
-  findUserByName: function(database, userName, callback) {
-    knex(database)
+  findUserByResource: function(type, resource, callback) {
+    var userFound = []
+    knex('users')
     .select()
     .then(function(users) {
-      var userMatch = []
-      userMatch[0] = _.find(users, function(c){
-      return c.name === userName
+      userFound[0] = _.find(users, function(c){
+      return c[type] === resource
     })
-    callback(null, userMatch)
+    callback(null, userFound)
     })
     .catch(function(err){
       callback(err)
     })
   },
 
-  findUserById: function(database, userId, callback) {
-    knex(database)
-    .select()
-    .then(function(users) {
-      var userMatch = []
-      userMatch[0] = _.find(users, function(c){
-      return c.user_id === userId.id
-    })
-    callback(null, userMatch)
-    })
-    .catch(function(err){
-      callback(err)
-    })
-  },
-
-  addNewUser: function(database, userDetails, callback) {
+  addNewUser: function(userDetails, callback) {
     var newUser = []
-    knex(database)
+    knex('users')
     .select()
     .then(function(){
       newUser[0] = userDetails
       delete newUser[0].commit
       callback(null, newUser)
-      return knex(database).insert(newUser)
+      return knex('users').insert(newUser)
     })
     .catch(function(err){
       callback(err)
     })
   },
 
-  addPost: function(database, userId, postDetails, callback) {
-    var newPost = []
-    knex(database)
+  addPost: function(userName, newPost, callback) {
+    var user = []
+    knex('users')
+    .join('posts', 'id', '=', 'posts.user_id')
+    .where({'userName': userName})
     .select()
-    .then(function(){
-      newPost[0] = postDetails
-      newPost[0]['user_id']= userId
-      delete newPost[0].commit
-      callback(null, userId)
-      return knex(database).insert(newPost)
+    .then(function(rows){
+      user.push(rows[0])
+      return knex.insert({user_id: rows[0].id, post: newPost}).into('posts')
+    })
+    .then(function(id){
+      callback(null, user)
     })
     .catch(function(err){
       callback(err)

@@ -31,9 +31,10 @@ app.get('/register', function(req, res){
 // Log-In
 
 app.post('/bizzyprofile', function(req, res) {
-  db.findUserByName('users', req.body.name, function(err, user) {
+  var userName = req.body.userName
+  db.findUserByResource('userName', userName, function(err, user) {
     if (err) {
-      res.send("ERROR")
+      res.render('error')
     } else {
       res.render('profile', {user: user})
     }
@@ -44,34 +45,27 @@ app.post('/bizzyprofile', function(req, res) {
 
 app.post('/register/success', function(req, res) {
   var userDetails = req.body
-  db.addNewUser('users', userDetails, function(err,user) {
+  db.addNewUser(userDetails, function(err,user) {
     if(err) {
-      console.log(err)
-      res.send("ERROR")
+      res.render('error')
     } else {
       res.render('profile', {user: user})
     }
   })
 })
 
+
 // Lodge a post
 
-app.post('/post/:id', function(req, res) {
-  var postDetails = req.body
-  var userId = req.params.id
-  db.addPost('posts', userId, postDetails, function (err, userId){
+app.post('/bizzyprofile/:userName', function(req, res) {
+  var postDetails = req.body.post
+  var userName = req.params.userName
+  db.addPost(userName, postDetails, function (err, user){
     if(err) {
-      res.send("ERROR")
+      res.render('error', err)
       return
     } else {
-      db.findUserById('users', userId, function(err2, user){
-        if(err2) {
-          res.send("ERROR")
-          return
-        } else {
-          res.render('profile', {user: user})
-        }
-      })
+      res.render('profile', {user: user})
     }
   })
 })

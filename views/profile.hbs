@@ -1,8 +1,8 @@
 {{#each user}}
-  <h2>{{name}}</h2>
+  <h2>{{userName}}</h2>
   <img src="{{logo}}">
-<form action="/post/{{id}}" method="POST">
-  <p>Status update:</p><input type="text" name="post" placeholder="What's happening at {{name}}" autofocus/>
+<form action="/bizzyprofile/{{userName}}" method="POST">
+  <p>Status update:</p><input type="text" name="post" placeholder="What's happening at {{userName}}" autofocus/>
   <input type="submit" name="commit" value="Submit"/>
 </form>
 

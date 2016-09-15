@@ -18,6 +18,21 @@ module.exports = {
     })
   },
 
+  findUserById: function(database, userId, callback) {
+    knex(database)
+    .select()
+    .then(function(users) {
+      var userMatch = []
+      userMatch[0] = _.find(users, function(c){
+      return c.user_id === userId.id
+    })
+    callback(null, userMatch)
+    })
+    .catch(function(err){
+      callback(err)
+    })
+  },
+
   addNewUser: function(database, userDetails, callback) {
     var newUser = []
     knex(database)
@@ -27,6 +42,22 @@ module.exports = {
       delete newUser[0].commit
       callback(null, newUser)
       return knex(database).insert(newUser)
+    })
+    .catch(function(err){
+      callback(err)
+    })
+  },
+
+  addPost: function(database, userId, postDetails, callback) {
+    var newPost = []
+    knex(database)
+    .select()
+    .then(function(){
+      newPost[0] = postDetails
+      newPost[0]['user_id']= userId
+      delete newPost[0].commit
+      callback(null, userId)
+      return knex(database).insert(newPost)
     })
     .catch(function(err){
       callback(err)

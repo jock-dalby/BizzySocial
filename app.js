@@ -43,12 +43,35 @@ app.post('/bizzyprofile', function(req, res) {
 // Register
 
 app.post('/register/success', function(req, res) {
-  db.addNewUser('users', req.body, function(err,user) {
+  var userDetails = req.body
+  db.addNewUser('users', userDetails, function(err,user) {
     if(err) {
       console.log(err)
       res.send("ERROR")
     } else {
       res.render('profile', {user: user})
+    }
+  })
+})
+
+// Lodge a post
+
+app.post('/post/:id', function(req, res) {
+  var postDetails = req.body
+  var userId = req.params.id
+  db.addPost('posts', userId, postDetails, function (err, userId){
+    if(err) {
+      res.send("ERROR")
+      return
+    } else {
+      db.findUserById('users', userId, function(err2, user){
+        if(err2) {
+          res.send("ERROR")
+          return
+        } else {
+          res.render('profile', {user: user})
+        }
+      })
     }
   })
 })

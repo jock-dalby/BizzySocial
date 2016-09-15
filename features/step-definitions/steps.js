@@ -20,7 +20,7 @@ module.exports = function () {
     browser.click(`input[value="${value}"]`)
   })
 
-  this.Then('I am redirected to the "$string"', function (pathanme, callback) {
+  this.Then('I am redirected to the "$string"', function (pathname, callback) {
     browser.waitForExist('body')
     var url = browser.getUrl()
     assert.equal(Url.parse(url).pathname, pathname, callback)

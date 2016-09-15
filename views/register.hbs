@@ -1,10 +1,13 @@
 <h2>Register</h2>
 <!-- Checkout flash as per passport sodium demo -->>
-<form action="register" method="POST">
-  <p>Bizzy Name:</p><input type="text" name="name" autofocus/>
-  <p>Bizzy Profile Pic Url:</p><input type="text" name="image"/>
-  <p>Bizzy Password:</p><input type="text" name="password" min="8" max="16"/>
-  <input type="submit" name="commit" value="Register"/>
+<form action="/register/success" method="POST">
+    <p>Bizzy Name:</p>
+    <input type="text" placeholder="Enter Biz Name...." name="name" autofocus/>
+    <p>Bizzy Logo:</p>
+    <input type="text" placeholder="Enter Biz Logo...." name="logo" />
+    <p>Bizzy Password:</p>
+    <input type="text" placeholder="Enter Biz Password...." name="password" min="8" max="16" />
+    <input type="submit" name="commit" value="Register" />
 </form>
 
 <h4>Already have an account? <a href="/login">Return to login</a></h4>

@@ -5,13 +5,13 @@ const _ = require('lodash')
 
 module.exports = {
 
-  findUserByResource: function(type, resource, callback) {
+  findUserByName: function(userName, callback) {
     var userFound = []
     knex('users')
     .select('userName', 'id', 'logo')
     .then(function(users) {
       userFound[0] = _.find(users, function(c){
-      return c[type] === resource
+      return c.userName === userName
     })
     callback(null, userFound)
     })
@@ -26,8 +26,10 @@ module.exports = {
     .then(function(){
       newUser[0] = userDetails
       delete newUser[0].commit
-      callback(null, newUser)
-      return knex('users').insert(newUser)
+      knex('users').insert(newUser)
+    .then(function(){
+        return callback(null, newUser)
+      })
     })
     .catch(function(err){
       callback(err)

@@ -39,20 +39,20 @@ app.get('/register', function(req, res){
 // })
 
 
-// Log-In
+// Log-In Page Submission
 
 app.post('/bizzyprofile', function(req, res) {
   var userName = req.body.userName
-  db.findUserByResource('userName', userName, function(err, user, followers) {
+  db.findUserByName(userName, function(err, user) {
     if (err) {
       res.render('error')
     } else {
-      res.render('profile', {user: user, followers: followers})
+      res.render('profile', {user: user})
     }
   })
 })
 
-// Register
+// Registration Page Submission
 
 app.post('/register/success', function(req, res) {
   var userDetails = req.body
@@ -60,7 +60,20 @@ app.post('/register/success', function(req, res) {
     if(err) {
       res.render('error')
     } else {
-      res.render('login', {title:"Bizzy Login"})
+      var user = []
+      knex('users')
+      .select('userName', 'id', 'logo')
+      .then(function(users) {
+        user[0] = _.find(users, function(c){
+          return c.userName === userDetails.userName
+          })
+          console.log(user)
+        res.render('profile', {user:user})
+        })
+      .catch(function(err){
+        res.render('error')
+        console.log('err', err)
+      })
     }
   })
 })
@@ -69,12 +82,11 @@ app.post('/register/success', function(req, res) {
 // Lodge a post
 
 app.post('/bizzyprofile/:id', function(req, res) {
-  var postDetails = req.body.post
   var userId = req.params.id
+  var postDetails = req.body.post
   db.addPost(userId, postDetails, function (err, user){
     if(err) {
       res.render('error', err)
-      return
     } else {
       res.render('profile', {user: user})
     }

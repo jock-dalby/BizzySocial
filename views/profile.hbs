@@ -1,9 +1,23 @@
 {{#each user}}
+<div>
   <h2>{{userName}}</h2>
   <img src="{{logo}}">
+</div>
+<div>
 <form action="/bizzyprofile/{{userName}}" method="POST">
   <p>Status update:</p><input type="text" name="post" placeholder="What's happening at {{userName}}" autofocus/>
   <input type="submit" name="commit" value="Submit"/>
 </form>
-
 {{/each}}
+</div>
+<div>
+  <table>
+    {{#each followers}}
+    <tr>
+      <td>{{userName}}</td>
+      <td>{{post}}</td>
+      <td>{{time}}</td>
+    </tr>
+    {{/each}}
+  </table>
+</div>

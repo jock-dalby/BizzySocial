@@ -1,6 +1,8 @@
 const knex = require('knex')(require('../knexfile').development)
 const _ = require('lodash')
 
+
+
 module.exports = {
 
   findUserByResource: function(type, resource, callback) {
@@ -37,19 +39,35 @@ module.exports = {
     var user = []
     knex('users')
     .join('posts', 'id', '=', 'posts.user_id')
-    .where({'userName': userName})
+    .where({'userName': "Kereru Brewing"})
     .select()
     .then(function(rows){
-      user.push(rows[0])
-      return knex.insert({user_id: rows[0].id, post: newPost}).into('posts')
+      _.each(rows, function(row){
+        console.log(row)
+        return knex.insert({user_id: row.id, post: newPost}).into('posts')
+      })
     })
     .then(function(id){
       callback(null, user)
     })
     .catch(function(err){
-      callback(err)
+      console.log(err)
     })
   }
+
+
+  //Three way join
+  // findUserFollowersPosts: function (userName, callback) {
+  //   knex('users')
+  //   .join('posts', 'users.id', '=', 'posts.user_id')
+  //   .join('follow', 'users.id', '=', 'follow.user_id')
+  //   .select()
+  //   .then(function(rows){
+  //     _.each(rows, function(row){
+  //       console.log(row)
+  //     })
+  //   })
+  // }
 
 
 }

@@ -32,11 +32,11 @@ app.get('/register', function(req, res){
 
 app.post('/bizzyprofile', function(req, res) {
   var userName = req.body.userName
-  db.findUserByResource('userName', userName, function(err, user) {
+  db.findUserByResource('userName', userName, function(err, user, followers) {
     if (err) {
       res.render('error')
     } else {
-      res.render('profile', {user: user})
+      res.render('profile', {user: user, followers: followers})
     }
   })
 })

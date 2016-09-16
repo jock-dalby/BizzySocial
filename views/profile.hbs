@@ -13,10 +13,22 @@
 </div>
 <div>
   <table>
+    <h3>Biz you follow</h3>
     {{#each followers}}
     <tr>
       <td>{{userName}}</td>
-      <td><img src="{{logo}}""</td>
+      <td><img src="{{logo}}"</td>
+    </tr>
+    {{/each}}
+  </table>
+</div>
+<div>
+  <table>
+    <h3>Other Biz on BizzySocial</h3>
+    {{#each others}}
+    <tr>
+      <td>{{userName}}</td>
+      <td><img src="{{logo}}"</td>
     </tr>
     {{/each}}
   </table>

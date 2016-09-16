@@ -45,6 +45,7 @@ app.post('/bizzyprofile', function(req, res) {
   var userName = req.body.userName
   var temp= []
   var followers = []
+  var others = []
   db.findUserByName(userName, function(err, user) {
     if (err) {
       res.render('error')
@@ -59,15 +60,24 @@ app.post('/bizzyprofile', function(req, res) {
       .select()
       .then(function(rows){
         _.forEach(rows, function(row){
-          for(var i = 0; i <= temp.length; i ++) {
-            if( row.id === temp[i]) {
-              followers.push(row)
+            if(row.id !== user[0].id) {
+            var count = 0
+            _.forEach(temp, function(n){
+              if(row.id === n) {
+                followers.push(row)
+              } else {
+                count ++
+              }
+            })
+            if(count === temp.length) {
+              others.push(row)
             }
           }
+          console.log(followers)
+          console.log(others)
         })
-        console.log(followers)
       })
-      return res.render('profile', {user:user, followers: followers})
+      return res.render('profile', {user:user, followers:followers, others:others})
     }
       // res.render('profile', {user: user})
   })

@@ -2,6 +2,7 @@
 <div>
   <h2>{{userName}}</h2>
   <img src="{{logo}}">
+  <a href='/bizzyprofile/{{id}}/following' method="POST">See people I'm following</a>
 </div>
 <div>
 <form action="/bizzyprofile/{{id}}" method="POST">
@@ -10,7 +11,7 @@
 </form>
 {{/each}}
 </div>
-<div>
+<!-- <div>
   <table>
     {{#each followers}}
     <tr>
@@ -20,4 +21,4 @@
     </tr>
     {{/each}}
   </table>
-</div>
+</div> -->

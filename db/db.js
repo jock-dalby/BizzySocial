@@ -48,14 +48,12 @@ module.exports = {
     .catch(function(err){
       callback(err)
     })
-  }
+  },
 
-
-  //Three way join
-  // findUserFollowersPosts: function (userName, callback) {
-  //   knex('users')
-  //   .join('posts', 'users.id', '=', 'posts.user_id')
-  //   .join('follow', 'users.id', '=', 'follow.user_id')
+  // findFollowers: function(userId, callback) {
+  //   knex('users as users1')
+  //   .join('follow', 'users1.id', '=', 'follow.user_id')
+  //   .join('users as users2', 'follow.follower', '=', 'users2.id')
   //   .select()
   //   .then(function(rows){
   //     _.each(rows, function(row){
@@ -63,6 +61,5 @@ module.exports = {
   //     })
   //   })
   // }
-
 
 }

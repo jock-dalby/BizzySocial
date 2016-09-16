@@ -27,6 +27,17 @@ app.get('/register', function(req, res){
   res.render('register', {title:"Bizzy Page"})
 })
 
+// app.get('/bizzyprofile/:id/following', function(req, res) {
+//   var userId = Number(req.params.id)
+//   db.findFollowers(userId, function(err, user, followers){
+//     if(err) {
+//       res.render('error')
+//     } else {
+//       res.render('RESULTS!!!!!!!')
+//     }
+//   })
+// })
+
 
 // Log-In
 
@@ -69,6 +80,7 @@ app.post('/bizzyprofile/:id', function(req, res) {
     }
   })
 })
+
 
 // Exports app functions
 module.exports = app

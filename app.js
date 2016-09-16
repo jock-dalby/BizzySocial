@@ -27,6 +27,18 @@ app.get('/register', function(req, res){
   res.render('register', {title:"Bizzy Page"})
 })
 
+// app.get('/bizzyprofile/:id/following', function(req, res) {
+//   var userId = Number(req.params.id)
+//   db.findFollowers(userId, function(err, user, followers){
+//     if(err) {
+//       res.render('error')
+//     } else {
+//       res.render('RESULTS!!!!!!!')
+//     }
+//   })
+// })
+
+
 // Log-In Page Submission
 
 app.post('/bizzyprofile', function(req, res) {
@@ -59,8 +71,7 @@ app.post('/register/success', function(req, res) {
         res.render('profile', {user:user})
         })
       .catch(function(err){
-        res.render('error')
-        console.lo
+        render('error')
       })
     }
   })

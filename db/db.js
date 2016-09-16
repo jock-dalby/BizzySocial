@@ -1,6 +1,8 @@
 const knex = require('knex')(require('../knexfile').development)
 const _ = require('lodash')
 
+
+
 module.exports = {
 
   findUserByName: function(userName, callback) {
@@ -37,8 +39,9 @@ module.exports = {
   addPost: function(userId, newPost, callback) {
     var user = []
     knex('users')
+    // .join('posts', 'users.id', '=', 'posts.user_id')
     .where({'id': userId})
-    .select('userName', 'id', 'logo')
+    .select('userName', 'logo')
     .then(function(rows){
       user.push(rows[0])
       callback(null, user)
@@ -47,6 +50,18 @@ module.exports = {
     .catch(function(err){
       callback(err)
     })
-  }
+  },
+
+  // findFollowers: function(userId, callback) {
+  //   knex('users as users1')
+  //   .join('follow', 'users1.id', '=', 'follow.user_id')
+  //   .join('users as users2', 'follow.follower', '=', 'users2.id')
+  //   .select()
+  //   .then(function(rows){
+  //     _.each(rows, function(row){
+  //       console.log(row)
+  //     })
+  //   })
+  // }
 
 }

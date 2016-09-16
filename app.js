@@ -24,21 +24,55 @@ app.get('/', function(req, res){
 })
 
 app.get('/register', function(req, res){
-  res.render('register', {title:"Bizzy Registration"})
+  res.render('register', {title:"Bizzy Page"})
 })
+
+// app.get('/bizzyprofile/:id/following', function(req, res) {
+//   var userId = Number(req.params.id)
+//   db.findFollowers(userId, function(err, user, followers){
+//     if(err) {
+//       res.render('error')
+//     } else {
+//       res.render('RESULTS!!!!!!!')
+//     }
+//   })
+// })
+
 
 // Log-In Page Submission
 
 app.post('/bizzyprofile', function(req, res) {
   var userName = req.body.userName
+  var temp= []
+  var followers = []
   db.findUserByName(userName, function(err, user) {
     if (err) {
       res.render('error')
     } else {
-      res.render('profile', {user: user})
+      knex('follow').where({'user_id': user[0].id})
+      .select('follower')
+      .then(function(rows){
+        temp = JSON.parse(rows[0].follower)
+        return
+      })
+      knex('users')
+      .select()
+      .then(function(rows){
+        _.forEach(rows, function(row){
+          for(var i = 0; i <= temp.length; i ++) {
+            if( row.id === temp[i]) {
+              followers.push(row)
+            }
+          }
+        })
+        console.log(followers)
+      })
+      return res.render('profile', {user:user, followers: followers})
     }
+      // res.render('profile', {user: user})
   })
 })
+
 
 // Registration Page Submission
 
@@ -58,8 +92,7 @@ app.post('/register/success', function(req, res) {
         res.render('profile', {user:user})
         })
       .catch(function(err){
-        res.render('error')
-        console.log('err', err)
+        render('error')
       })
     }
   })

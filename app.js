@@ -27,27 +27,16 @@ app.get('/register', function(req, res){
   res.render('register', {title:"Bizzy Page"})
 })
 
-// app.get('/bizzyprofile/:id/following', function(req, res) {
-//   var userId = Number(req.params.id)
-//   db.findFollowers(userId, function(err, user, followers){
-//     if(err) {
-//       res.render('error')
-//     } else {
-//       res.render('RESULTS!!!!!!!')
-//     }
-//   })
-// })
-
 
 // Log-In
 
 app.post('/bizzyprofile', function(req, res) {
   var userName = req.body.userName
-  db.findUserByResource('userName', userName, function(err, user, followers) {
+  db.findUserByResource('userName', userName, function(err, user) {
     if (err) {
       res.render('error')
     } else {
-      res.render('profile', {user: user, followers: followers})
+      res.render('profile', {user: user})
     }
   })
 })
@@ -56,11 +45,11 @@ app.post('/bizzyprofile', function(req, res) {
 
 app.post('/register/success', function(req, res) {
   var userDetails = req.body
-  db.addNewUser(userDetails, function(err, msg) {
+  db.addNewUser(userDetails, function(err,user) {
     if(err) {
       res.render('error')
     } else {
-      res.render('login', {title:"Bizzy Login"})
+      res.render('profile', {user: user})
     }
   })
 })
@@ -68,10 +57,10 @@ app.post('/register/success', function(req, res) {
 
 // Lodge a post
 
-app.post('/bizzyprofile/:id', function(req, res) {
+app.post('/bizzyprofile/:userName', function(req, res) {
   var postDetails = req.body.post
-  var userId = req.params.id
-  db.addPost(userId, postDetails, function (err, user){
+  var userName = req.params.userName
+  db.addPost(userName, postDetails, function (err, user){
     if(err) {
       res.render('error', err)
       return
@@ -80,7 +69,6 @@ app.post('/bizzyprofile/:id', function(req, res) {
     }
   })
 })
-
 
 // Exports app functions
 module.exports = app

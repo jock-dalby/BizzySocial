@@ -24,7 +24,7 @@ app.get('/', function(req, res){
 })
 
 app.get('/register', function(req, res){
-  res.render('register', {title:"Bizzy Registration"})
+  res.render('register', {title:"Bizzy Page"})
 })
 
 // Log-In Page Submission
@@ -55,11 +55,12 @@ app.post('/register/success', function(req, res) {
         user[0] = _.find(users, function(c){
           return c.userName === userDetails.userName
           })
+          console.log(user)
         res.render('profile', {user:user})
         })
       .catch(function(err){
         res.render('error')
-        console.log('err', err)
+        console.lo
       })
     }
   })

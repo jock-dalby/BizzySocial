@@ -24,20 +24,8 @@ app.get('/', function(req, res){
 })
 
 app.get('/register', function(req, res){
-  res.render('register', {title:"Bizzy Page"})
+  res.render('register', {title:"Bizzy Registration"})
 })
-
-// app.get('/bizzyprofile/:id/following', function(req, res) {
-//   var userId = Number(req.params.id)
-//   db.findFollowers(userId, function(err, user, followers){
-//     if(err) {
-//       res.render('error')
-//     } else {
-//       res.render('RESULTS!!!!!!!')
-//     }
-//   })
-// })
-
 
 // Log-In Page Submission
 
@@ -67,7 +55,6 @@ app.post('/register/success', function(req, res) {
         user[0] = _.find(users, function(c){
           return c.userName === userDetails.userName
           })
-          console.log(user)
         res.render('profile', {user:user})
         })
       .catch(function(err){

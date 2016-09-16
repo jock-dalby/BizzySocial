@@ -45,11 +45,11 @@ app.post('/bizzyprofile', function(req, res) {
 
 app.post('/register/success', function(req, res) {
   var userDetails = req.body
-  db.addNewUser(userDetails, function(err,user) {
+  db.addNewUser(userDetails, function(err, msg) {
     if(err) {
       res.render('error')
     } else {
-      res.render('profile', {user: user})
+      res.render('login', {title:"Bizzy Login"})
     }
   })
 })
@@ -57,10 +57,10 @@ app.post('/register/success', function(req, res) {
 
 // Lodge a post
 
-app.post('/bizzyprofile/:userName', function(req, res) {
+app.post('/bizzyprofile/:id', function(req, res) {
   var postDetails = req.body.post
-  var userName = req.params.userName
-  db.addPost(userName, postDetails, function (err, user){
+  var userId = req.params.id
+  db.addPost(userId, postDetails, function (err, user){
     if(err) {
       res.render('error', err)
       return

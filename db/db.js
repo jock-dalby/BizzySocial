@@ -8,7 +8,7 @@ module.exports = {
   findUserByResource: function(type, resource, callback) {
     var userFound = []
     knex('users')
-    .select()
+    .select('userName', 'id', 'logo')
     .then(function(users) {
       userFound[0] = _.find(users, function(c){
       return c[type] === resource
@@ -23,7 +23,6 @@ module.exports = {
   addNewUser: function(userDetails, callback) {
     var newUser = []
     knex('users')
-    .select()
     .then(function(){
       newUser[0] = userDetails
       delete newUser[0].commit
@@ -35,23 +34,19 @@ module.exports = {
     })
   },
 
-  addPost: function(userName, newPost, callback) {
+  addPost: function(userId, newPost, callback) {
     var user = []
     knex('users')
-    .join('posts', 'id', '=', 'posts.user_id')
-    .where({'userName': "Kereru Brewing"})
-    .select()
+    // .join('posts', 'users.id', '=', 'posts.user_id')
+    .where({'id': userId})
+    .select('userName', 'logo')
     .then(function(rows){
-      _.each(rows, function(row){
-        console.log(row)
-        return knex.insert({user_id: row.id, post: newPost}).into('posts')
-      })
-    })
-    .then(function(id){
+      user.push(rows[0])
       callback(null, user)
+      return knex.insert({user_id: userId, post: JSON.stringify(newPost)}).into('posts')
     })
     .catch(function(err){
-      console.log(err)
+      callback(err)
     })
   }
 

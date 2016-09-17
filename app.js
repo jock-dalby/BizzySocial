@@ -46,6 +46,7 @@ app.post('/bizzyprofile', function(req, res) {
   var temp= []
   var followers = []
   var others = []
+  var postItems = []
   db.findUserByName(userName, function(err, user) {
     if (err) {
       res.render('error')
@@ -56,6 +57,7 @@ app.post('/bizzyprofile', function(req, res) {
         temp = JSON.parse(rows[0].follower)
         return
       })
+      // find business following an dnot following
       knex('users')
       .select()
       .then(function(rows){
@@ -73,13 +75,26 @@ app.post('/bizzyprofile', function(req, res) {
               others.push(row)
             }
           }
-          console.log(followers)
-          console.log(others)
         })
+        return
       })
-      return res.render('profile', {user:user, followers:followers, others:others})
+      knex('users')
+      .join('posts', 'id', '=', 'posts.user_id')
+      .select('id', 'userName', 'post')
+      .then(function(rows){
+        _.forEach(rows, function(row){
+            _.forEach(temp, function(n){
+              if(row.id === n) {
+                postItems.push(row)
+              }
+            })
+          })
+        })
+      .then(function(){
+        postItems.reverse()
+        return res.render('profile', {user:user, followers:followers, others:others, postItems: postItems})
+      })
     }
-      // res.render('profile', {user: user})
   })
 })
 
@@ -114,11 +129,57 @@ app.post('/register/success', function(req, res) {
 app.post('/bizzyprofile/:id', function(req, res) {
   var userId = req.params.id
   var postDetails = req.body.post
+  var temp= []
+  var followers = []
+  var others = []
+  var postItems = []
   db.addPost(userId, postDetails, function (err, user){
-    if(err) {
-      res.render('error', err)
+    if (err) {
+      res.render('error')
     } else {
-      res.render('profile', {user: user})
+      knex('follow').where({'user_id': user[0].id})
+      .select('follower')
+      .then(function(rows){
+        temp = JSON.parse(rows[0].follower)
+        return
+      })
+      // find business following an dnot following
+      knex('users')
+      .select()
+      .then(function(rows){
+        _.forEach(rows, function(row){
+            if(row.id !== user[0].id) {
+            var count = 0
+            _.forEach(temp, function(n){
+              if(row.id === n) {
+                followers.push(row)
+              } else {
+                count ++
+              }
+            })
+            if(count === temp.length) {
+              others.push(row)
+            }
+          }
+        })
+        return
+      })
+      knex('users')
+      .join('posts', 'id', '=', 'posts.user_id')
+      .select('id', 'userName', 'post')
+      .then(function(rows){
+        _.forEach(rows, function(row){
+            _.forEach(temp, function(n){
+              if(row.id === n) {
+                postItems.push(row)
+              }
+            })
+          })
+        })
+      .then(function(){
+        postItems.reverse()
+        return res.render('profile', {user:user, followers:followers, others:others, postItems: postItems})
+      })
     }
   })
 })

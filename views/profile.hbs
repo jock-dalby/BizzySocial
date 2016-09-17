@@ -12,24 +12,31 @@
 {{/each}}
 </div>
 <div>
+  <h3>News feed</h3>
   <table>
-    <h3>Biz you follow</h3>
-    {{#each followers}}
+    {{#each postItems}}
     <tr>
-      <td>{{userName}}</td>
-      <td><img src="{{logo}}"</td>
+      <td id="postName">{{userName}}</td>
+      <td id="postBody">{{post}}</td>
     </tr>
     {{/each}}
   </table>
 </div>
-<div>
-  <table>
+<div class="halfPage">
+    <h3>Biz you follow</h3>
+    {{#each followers}}
+    <div>
+      <h4>{{userName}}</h4>
+      <img src="{{logo}}">
+    </div>
+    {{/each}}
+</div>
+<div class="halfPage">
     <h3>Other Biz on BizzySocial</h3>
     {{#each others}}
-    <tr>
-      <td>{{userName}}</td>
-      <td><img src="{{logo}}"</td>
-    </tr>
+    <div>
+      <h4>{{userName}}</h4>
+      <img src="{{logo}}">
+    </div>
     {{/each}}
-  </table>
 </div>

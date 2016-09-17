@@ -7,7 +7,7 @@ module.exports =
 },
 {
     userName: "ParrotDog",
-    logo: "http://parrotdog.co.nz/wp-content/themes/parrotdog-child/images/logo-white-2.svg",
+    logo: "http://idealog.co.nz/media/VERSIONS/images/blog/2012/02/parrotdog_lcolour_hi_950x700--upscale.jpg",
     password: "password123"
 },
 {
@@ -17,7 +17,7 @@ module.exports =
 },
 {
     userName: "Tuatara",
-    logo: "http://www.tuatarabrewing.co.nz/themes/tuatara/images/logotype.png",
+    logo: "https://pbs.twimg.com/profile_images/563610998754390016/jcUTpdbT.jpeg",
     password: "password123"
 },
 {

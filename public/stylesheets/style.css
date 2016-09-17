@@ -1,0 +1,118 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: orange;
+  text-align: center;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+  min-height: calc(100vh - 234px);
+}
+
+header,
+footer {
+  background: turquoise;
+}
+
+header {
+  border-bottom: 3px solid purple;
+
+}
+
+footer {
+  height: 80px;
+  border-top: 3px solid purple;
+}
+
+footer p {
+  font-size: 1.7rem;
+  font-weight: bolder;
+  padding-top: 20px;
+}
+
+h1 {
+  font-size: 4.6rem;
+  padding: 20px 0;
+  margin: 0 auto 20px;
+}
+
+h2 {
+  font-size: 2.8rem;
+  margin-bottom: 30px;
+}
+
+h3 {
+  font-size: 2.2rem;
+  color: firebrick;
+}
+
+h3,
+input {
+  margin: 10px auto;;
+}
+
+h4 {
+  font-size: 1.6rem;
+  margin: 30px auto 10px;;
+  text-decoration: underline;
+}
+
+p {
+  font-size: 1.4rem;
+  font-weight: bolder;
+  padding-top: 20px;
+}
+
+input {
+  height: 32px;
+  width: 50%;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+img {
+  width: 200px;
+  border-radius: 10%;
+  display: block;
+  margin: 0 auto 20px;
+}
+
+/* Newsfeed table */
+
+table {
+  margin : 10px auto;
+  font-size: 1.6rem;
+  text-align: left;
+}
+
+td {
+  padding-top: 6px;
+  padding-right: 80px;
+  padding-bottom: 5px;
+  min-width: 45%;
+}
+
+#postName {
+  font-weight: bolder;
+}
+
+/* Columns - Upgrade using Skeleton */
+
+.halfPage {
+  width: 46%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.left {
+  float: left
+}
+
+.right {
+  float: right;
+}

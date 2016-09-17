@@ -24,21 +24,80 @@ app.get('/', function(req, res){
 })
 
 app.get('/register', function(req, res){
-  res.render('register', {title:"Bizzy Registration"})
+  res.render('register', {title:"Bizzy Page"})
 })
+
+// app.get('/bizzyprofile/:id/following', function(req, res) {
+//   var userId = Number(req.params.id)
+//   db.findFollowers(userId, function(err, user, followers){
+//     if(err) {
+//       res.render('error')
+//     } else {
+//       res.render('RESULTS!!!!!!!')
+//     }
+//   })
+// })
+
 
 // Log-In Page Submission
 
 app.post('/bizzyprofile', function(req, res) {
   var userName = req.body.userName
+  var temp= []
+  var followers = []
+  var others = []
+  var postItems = []
   db.findUserByName(userName, function(err, user) {
     if (err) {
       res.render('error')
     } else {
-      res.render('profile', {user: user})
+      knex('follow').where({'user_id': user[0].id})
+      .select('follower')
+      .then(function(rows){
+        temp = JSON.parse(rows[0].follower)
+        return
+      })
+      // find business following an dnot following
+      knex('users')
+      .select()
+      .then(function(rows){
+        _.forEach(rows, function(row){
+            if(row.id !== user[0].id) {
+            var count = 0
+            _.forEach(temp, function(n){
+              if(row.id === n) {
+                followers.push(row)
+              } else {
+                count ++
+              }
+            })
+            if(count === temp.length) {
+              others.push(row)
+            }
+          }
+        })
+        return
+      })
+      knex('users')
+      .join('posts', 'id', '=', 'posts.user_id')
+      .select('id', 'userName', 'post')
+      .then(function(rows){
+        _.forEach(rows, function(row){
+            _.forEach(temp, function(n){
+              if(row.id === n) {
+                postItems.push(row)
+              }
+            })
+          })
+        })
+      .then(function(){
+        postItems.reverse()
+        return res.render('profile', {user:user, followers:followers, others:others, postItems: postItems})
+      })
     }
   })
 })
+
 
 // Registration Page Submission
 
@@ -58,8 +117,7 @@ app.post('/register/success', function(req, res) {
         res.render('profile', {user:user})
         })
       .catch(function(err){
-        res.render('error')
-        console.log('err', err)
+        render('error')
       })
     }
   })
@@ -71,11 +129,57 @@ app.post('/register/success', function(req, res) {
 app.post('/bizzyprofile/:id', function(req, res) {
   var userId = req.params.id
   var postDetails = req.body.post
+  var temp= []
+  var followers = []
+  var others = []
+  var postItems = []
   db.addPost(userId, postDetails, function (err, user){
-    if(err) {
-      res.render('error', err)
+    if (err) {
+      res.render('error')
     } else {
-      res.render('profile', {user: user})
+      knex('follow').where({'user_id': user[0].id})
+      .select('follower')
+      .then(function(rows){
+        temp = JSON.parse(rows[0].follower)
+        return
+      })
+      // find business following an dnot following
+      knex('users')
+      .select()
+      .then(function(rows){
+        _.forEach(rows, function(row){
+            if(row.id !== user[0].id) {
+            var count = 0
+            _.forEach(temp, function(n){
+              if(row.id === n) {
+                followers.push(row)
+              } else {
+                count ++
+              }
+            })
+            if(count === temp.length) {
+              others.push(row)
+            }
+          }
+        })
+        return
+      })
+      knex('users')
+      .join('posts', 'id', '=', 'posts.user_id')
+      .select('id', 'userName', 'post')
+      .then(function(rows){
+        _.forEach(rows, function(row){
+            _.forEach(temp, function(n){
+              if(row.id === n) {
+                postItems.push(row)
+              }
+            })
+          })
+        })
+      .then(function(){
+        postItems.reverse()
+        return res.render('profile', {user:user, followers:followers, others:others, postItems: postItems})
+      })
     }
   })
 })

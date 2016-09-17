@@ -1,6 +1,6 @@
 Feature: Login page working
 
-
+@watch
 Scenario: I want to login to BizzySocial
   Given I am viewing the page at "/"
   When I enter "Panhead Custom Ales" into the "userName" input

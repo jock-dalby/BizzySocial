@@ -11,14 +11,32 @@
 </form>
 {{/each}}
 </div>
-<!-- <div>
+<div>
+  <h3>News feed</h3>
   <table>
-    {{#each followers}}
+    {{#each postItems}}
     <tr>
-      <td>{{userName}}</td>
-      <td>{{post}}</td>
-      <td>{{time}}</td>
+      <td id="postName">{{userName}}</td>
+      <td id="postBody">{{post}}</td>
     </tr>
     {{/each}}
   </table>
-</div> -->
+</div>
+<div class="halfPage">
+    <h3>Biz you follow</h3>
+    {{#each followers}}
+    <div>
+      <h4>{{userName}}</h4>
+      <img src="{{logo}}">
+    </div>
+    {{/each}}
+</div>
+<div class="halfPage">
+    <h3>Other Biz on BizzySocial</h3>
+    {{#each others}}
+    <div>
+      <h4>{{userName}}</h4>
+      <img src="{{logo}}">
+    </div>
+    {{/each}}
+</div>

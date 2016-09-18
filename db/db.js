@@ -42,7 +42,7 @@ module.exports = {
     .then(function(rows){
       user.push(rows[0])
       callback(null, user)
-      return knex.insert({user_id: userId, post: JSON.stringify(newPost)}).into('posts')
+      return knex.insert({user_id: userId, post: newPost}).into('posts')
     })
     .catch(function(err){
       callback(err)

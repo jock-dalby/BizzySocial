@@ -7,20 +7,11 @@ module.exports = {
     return knex('users').where({'userName':userName}).select('userName', 'id', 'logo')
   },
 
-  addNewUser: function(userDetails, callback) {
+  addNewUser: function(userDetails) {
     var newUser = []
-    knex('users')
-    .then(function(){
-      newUser[0] = userDetails
-      delete newUser[0].commit
-      knex('users').insert(newUser)
-    .then(function(){
-        return callback(null, newUser)
-      })
-    })
-    .catch(function(err){
-      callback(err)
-    })
+    newUser[0] = userDetails
+    delete newUser[0].commit
+    return knex('users').insert(newUser)
   },
 
   addPost: function(userId, newPost, callback) {

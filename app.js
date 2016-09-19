@@ -43,27 +43,41 @@ app.get('/register', function(req, res){
 
 app.post('/bizzyprofile', function(req, res) {
   var userName = req.body.userName
-  var temp= []
-  var followers = []
-  var others = []
-  var postItems = []
+  var userProfile = []
+  var followingList = []
+  var followArr = []
+  var othersList = []
+  var postsArr = []
   return db.findUserByName(userName)
   .then(function(user){
-    console.log(user)
+    userProfile = user
     return knex('users')
     .join('follow', 'id', '=', 'follow.user_id')
     .where({'id': Number(user[0].id)})
     .select('follow_id')
   })
   .then(function(following){
-    console.log(following) // Got this far, need to figure out how to convert following list to user profiles
-    return knex('users')
-    .select()
+    _.map(following, function(f){
+        followArr.push(f.follow_id)
+    })
+    return knex('users').whereIn('id', followArr).select('userName', 'logo')
   })
-  .then(function(stuff){
-    console.log('stuff ', stuff)
-    postItems.reverse()
-    return res.render('profile', {user:user})
+  .then(function(followList){
+    followingList = followList
+    return knex('users').whereNotIn('id', followArr).select('userName', 'logo')
+  })
+  .then(function(others){
+    othersList = others
+    return knex('users').join('posts', 'id', '=', 'posts.user_id').whereIn('user_id', followArr).select('userName', 'post')
+  })
+  .then(function(postInfo){
+    postsArr = postInfo
+  })
+  .then(function(){
+    return res.render('profile', {user:userProfile, following:followingList, others:othersList, postItems: postsArr})
+  })
+  .catch(function(err){
+    render('error') // UPDATE ERROR RENDER PAGE STUFF!!!
   })
 })
 
@@ -72,23 +86,16 @@ app.post('/bizzyprofile', function(req, res) {
 
 app.post('/register/success', function(req, res) {
   var userDetails = req.body
-  db.addNewUser(userDetails, function(err, msg) {
-    if(err) {
-      res.render('error')
-    } else {
-      var user = []
-      knex('users')
-      .select('userName', 'id', 'logo')
-      .then(function(users) {
-        user[0] = _.find(users, function(c){
-          return c.userName === userDetails.userName
-          })
-        res.render('profile', {user:user})
-        })
-      .catch(function(err){
-        render('error')
-      })
-    }
+  return db.addNewUser(userDetails)
+  .then(function(){
+    return knex('users').where({'userName':userDetails.userName}).select('userName', 'id', 'logo')
+  })
+  .then(function(user){
+    console.log(user)
+    res.render('profile', {user:user})
+  })
+  .catch(function(err){
+    res.render('error')
   })
 })
 

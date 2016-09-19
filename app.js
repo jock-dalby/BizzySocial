@@ -47,54 +47,23 @@ app.post('/bizzyprofile', function(req, res) {
   var followers = []
   var others = []
   var postItems = []
-  db.findUserByName(userName, function(err, user) {
-    if (err) {
-      res.render('error')
-    } else {
-      knex('follow').where({'user_id': user[0].id})
-      .select('follower')
-      .then(function(rows){
-        temp = JSON.parse(rows[0].follower)
-        return
-      })
-      // find business following an dnot following
-      knex('users')
-      .select()
-      .then(function(rows){
-        _.forEach(rows, function(row){
-            if(row.id !== user[0].id) {
-            var count = 0
-            _.forEach(temp, function(n){
-              if(row.id === n) {
-                followers.push(row)
-              } else {
-                count ++
-              }
-            })
-            if(count === temp.length) {
-              others.push(row)
-            }
-          }
-        })
-        return
-      })
-      knex('users')
-      .join('posts', 'id', '=', 'posts.user_id')
-      .select('id', 'userName', 'post')
-      .then(function(rows){
-        _.forEach(rows, function(row){
-            _.forEach(temp, function(n){
-              if(row.id === n) {
-                postItems.push(row)
-              }
-            })
-          })
-        })
-      .then(function(){
-        postItems.reverse()
-        return res.render('profile', {user:user, followers:followers, others:others, postItems: postItems})
-      })
-    }
+  return db.findUserByName(userName)
+  .then(function(user){
+    console.log(user)
+    return knex('users')
+    .join('follow', 'id', '=', 'follow.user_id')
+    .where({'id': Number(user[0].id)})
+    .select('follow_id')
+  })
+  .then(function(following){
+    console.log(following) // Got this far, need to figure out how to convert following list to user profiles
+    return knex('users')
+    .select()
+  })
+  .then(function(stuff){
+    console.log('stuff ', stuff)
+    postItems.reverse()
+    return res.render('profile', {user:user})
   })
 })
 

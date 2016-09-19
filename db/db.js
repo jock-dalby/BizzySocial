@@ -14,19 +14,8 @@ module.exports = {
     return knex('users').insert(newUser)
   },
 
-  addPost: function(userId, newPost, callback) {
-    var user = []
-    knex('users')
-    .where({'id': userId})
-    .select('userName', 'id', 'logo')
-    .then(function(rows){
-      user.push(rows[0])
-      callback(null, user)
-      return knex.insert({user_id: userId, post: newPost}).into('posts')
-    })
-    .catch(function(err){
-      callback(err)
-    })
+  addPost: function(userId, newPost) {
+    return knex.insert({user_id: userId, post: newPost}).into('posts')
   }
 
 }
